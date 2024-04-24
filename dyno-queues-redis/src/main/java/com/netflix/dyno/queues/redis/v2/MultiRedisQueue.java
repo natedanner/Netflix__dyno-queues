@@ -37,13 +37,13 @@ import java.util.stream.Collectors;
  */
 public class MultiRedisQueue implements DynoQueue {
 
-    private List<String> shards;
+    private final List<String> shards;
 
-    private String name;
+    private final String name;
 
     private Map<String, RedisPipelineQueue> queues = new HashMap<>();
 
-    private RedisPipelineQueue me;
+    private final RedisPipelineQueue me;
 
     public MultiRedisQueue(String queueName, String shardName, Map<String, RedisPipelineQueue> queues) {
         this.name = queueName;
@@ -267,7 +267,7 @@ public class MultiRedisQueue implements DynoQueue {
         throw new UnsupportedOperationException();
     }
 
-    private AtomicInteger nextShardIndex = new AtomicInteger(0);
+    private final AtomicInteger nextShardIndex = new AtomicInteger(0);
 
     private String getNextShard() {
         int indx = nextShardIndex.incrementAndGet();
@@ -275,8 +275,7 @@ public class MultiRedisQueue implements DynoQueue {
             nextShardIndex.set(0);
             indx = 0;
         }
-        String s = shards.get(indx);
-        return s;
+        return shards.get(indx);
     }
 
     @Override

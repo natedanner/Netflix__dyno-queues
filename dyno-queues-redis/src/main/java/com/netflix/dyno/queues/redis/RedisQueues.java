@@ -125,7 +125,7 @@ public class RedisQueues implements Closeable {
 
         String key = queueName.intern();
 
-        return queues.computeIfAbsent(key, (keyToCompute) -> new RedisDynoQueue(clock, redisKeyPrefix, queueName, allShards, shardName, unackHandlerIntervalInMS, shardingStrategy, singleRingTopology)
+        return queues.computeIfAbsent(key, keyToCompute -> new RedisDynoQueue(clock, redisKeyPrefix, queueName, allShards, shardName, unackHandlerIntervalInMS, shardingStrategy, singleRingTopology)
                 .withUnackTime(unackTime)
                 .withNonQuorumConn(nonQuorumConn)
                 .withQuorumConn(quorumConn));

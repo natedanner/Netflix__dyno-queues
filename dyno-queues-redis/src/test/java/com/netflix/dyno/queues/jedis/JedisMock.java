@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  */
 public class JedisMock extends Jedis {
 
-    private IRedisClient redis;
+    private final IRedisClient redis;
 
     public JedisMock() {
         super("");
@@ -51,7 +51,7 @@ public class JedisMock extends Jedis {
     }
 
     private Set<Tuple> toTupleSet(Set<ZsetPair> pairs) {
-        Set<Tuple> set = new HashSet<Tuple>();
+        Set<Tuple> set = new HashSet<>();
         for (ZsetPair pair : pairs) {
             set.add(new Tuple(pair.member, pair.score));
         }
@@ -185,7 +185,7 @@ public class JedisMock extends Jedis {
     public List<String> mget(final String... keys) {
         try {
             String[] mget = redis.mget(keys);
-            List<String> lst = new ArrayList<String>(mget.length);
+            List<String> lst = new ArrayList<>(mget.length);
             for (String get : mget) {
                 lst.add(get);
             }
@@ -324,7 +324,8 @@ public class JedisMock extends Jedis {
     @Override
     public String hmset(final String key, final Map<String, String> hash) {
         try {
-            String field = null, value = null;
+            String field = null;
+            String value = null;
             String[] args = new String[(hash.size() - 1) * 2];
             int idx = 0;
             for (String f : hash.keySet()) {
@@ -753,7 +754,7 @@ public class JedisMock extends Jedis {
         try {
             Double score = null;
             String member = null;
-            List<ZsetPair> scoresmembers = new ArrayList<ZsetPair>((scoreMembers.size() - 1) * 2);
+            List<ZsetPair> scoresmembers = new ArrayList<>((scoreMembers.size() - 1) * 2);
             for (String m : scoreMembers.keySet()) {
                 if (m == null) {
                     member = m;
@@ -1124,8 +1125,7 @@ public class JedisMock extends Jedis {
         try {
             org.rarefiedredis.redis.ScanResult<Set<String>> sr = redis.sscan(key, Long.valueOf(cursor), "count", "1000000");
             List<String> list = sr.results.stream().collect(Collectors.toList());
-            ScanResult<String> result = new ScanResult<String>("0", list);
-            return result;
+            return new ScanResult<>("0", list);
         } catch (Exception e) {
             throw new JedisException(e);
         }
@@ -1136,9 +1136,7 @@ public class JedisMock extends Jedis {
             org.rarefiedredis.redis.ScanResult<Map<String, String>> mockr = redis.hscan(key, Long.valueOf(cursor), "count", "1000000");
             Map<String, String> results = mockr.results;
             List<Entry<String, String>> list = results.entrySet().stream().collect(Collectors.toList());
-            ScanResult<Entry<String, String>> result = new ScanResult<Entry<String, String>>("0", list);
-
-            return result;
+            return new ScanResult<>("0", list);
         } catch (Exception e) {
             throw new JedisException(e);
         }
@@ -1148,10 +1146,9 @@ public class JedisMock extends Jedis {
         try {
             org.rarefiedredis.redis.ScanResult<Set<ZsetPair>> sr = redis.zscan(key, Long.valueOf(cursor), "count", "1000000");
             List<ZsetPair> list = sr.results.stream().collect(Collectors.toList());
-            List<Tuple> tl = new LinkedList<Tuple>();
+            List<Tuple> tl = new LinkedList<>();
             list.forEach(p -> tl.add(new Tuple(p.member, p.score)));
-            ScanResult<Tuple> result = new ScanResult<Tuple>("0", tl);
-            return result;
+            return new ScanResult<>("0", tl);
         } catch (Exception e) {
             throw new JedisException(e);
         }

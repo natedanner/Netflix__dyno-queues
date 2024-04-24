@@ -29,7 +29,7 @@ import redis.clients.jedis.params.ZAddParams;
  */
 public class DynoJedisPipe implements Pipe {
 
-    private DynoJedisPipeline pipe;
+    private final DynoJedisPipeline pipe;
 
     private boolean modified;
 

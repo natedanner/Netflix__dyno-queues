@@ -238,8 +238,7 @@ public class QueueBuilder {
             return queues.values().iterator().next();
         }
 
-        MultiRedisQueue queue = new MultiRedisQueue(queueName, currentShard, queues);
-        return queue;
+        return new MultiRedisQueue(queueName, currentShard, queues);
     }
 
 
@@ -269,12 +268,11 @@ public class QueueBuilder {
                             rack = amazonInfo.get(MetaDataKey.availabilityZone);
                         }
                         //Host host = new Host(info.getHostName(), info.getIPAddr(), rack, status);
-                        Host host = new HostBuilder()
+                        return new HostBuilder()
                                 .setHostname(info.getHostName())
                                 .setIpAddress(info.getIPAddr())
                                 .setRack(rack).setStatus(status)
                                 .createHost();
-                        return host;
                     }));
             return hosts;
         };

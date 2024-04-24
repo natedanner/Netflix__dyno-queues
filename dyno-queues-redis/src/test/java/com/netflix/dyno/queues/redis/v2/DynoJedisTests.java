@@ -39,7 +39,7 @@ public class DynoJedisTests extends BaseQueueTests {
 
     private static String messageKeyPrefix;
 
-    private static int maxHashBuckets = 32;
+    private static final int maxHashBuckets = 32;
 
     public DynoJedisTests() {
         super("dyno_queue_tests");

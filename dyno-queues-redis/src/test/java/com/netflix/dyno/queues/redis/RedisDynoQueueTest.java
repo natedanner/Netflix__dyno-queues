@@ -329,7 +329,7 @@ public class RedisDynoQueueTest {
         assertNotNull(messages3);
         assertEquals(10, messages3.size());
         assertEquals(messages, messages3);
-        assertEquals(10, messages3.stream().map(msg -> msg.getId()).collect(Collectors.toSet()).size());
+        assertEquals(10, messages3.stream().map(Message::getId).collect(Collectors.toSet()).size());
         messages3.stream().forEach(System.out::println);
         assertTrue(dynoClient.hlen(messageKey) == 10);
 

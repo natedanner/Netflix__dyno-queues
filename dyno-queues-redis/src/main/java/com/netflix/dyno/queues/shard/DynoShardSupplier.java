@@ -63,7 +63,7 @@ public class DynoShardSupplier implements ShardSupplier {
 
     @Override
     public Set<String> getQueueShards() {
-        return hs.getHosts().stream().map(host -> host.getRack()).map(rackToShardMap).collect(Collectors.toSet());
+        return hs.getHosts().stream().map(Host::getRack).map(rackToShardMap).collect(Collectors.toSet());
     }
 
     @Override

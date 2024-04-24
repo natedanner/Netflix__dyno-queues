@@ -30,7 +30,7 @@ import java.util.Set;
  */
 public class SingleShardSupplier implements ShardSupplier {
 
-    private String shardName;
+    private final String shardName;
 
     public SingleShardSupplier(String shardName) {
         this.shardName = shardName;

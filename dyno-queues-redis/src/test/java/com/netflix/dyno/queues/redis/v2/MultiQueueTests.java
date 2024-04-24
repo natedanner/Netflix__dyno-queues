@@ -45,7 +45,7 @@ public class MultiQueueTests {
 
     private static String messageKeyPrefix;
 
-    private static int maxHashBuckets = 32;
+    private static final int maxHashBuckets = 32;
 
     public DynoQueue getQueue(String redisKeyPrefix, String queueName) {
         JedisPoolConfig config = new JedisPoolConfig();

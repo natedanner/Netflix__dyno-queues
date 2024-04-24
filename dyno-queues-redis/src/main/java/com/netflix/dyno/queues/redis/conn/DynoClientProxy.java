@@ -31,7 +31,7 @@ import redis.clients.jedis.Tuple;
  */
 public class DynoClientProxy implements RedisConnection {
 
-    private DynoJedisClient jedis;
+    private final DynoJedisClient jedis;
 
 
     public DynoClientProxy(DynoJedisClient jedis) {

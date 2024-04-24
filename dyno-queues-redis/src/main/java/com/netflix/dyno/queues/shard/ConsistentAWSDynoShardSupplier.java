@@ -19,19 +19,18 @@ public class ConsistentAWSDynoShardSupplier extends ConsistentDynoShardSupplier 
      */
     public ConsistentAWSDynoShardSupplier(HostSupplier hs, String region, String localRack) {
         super(hs, region, localRack);
-        Map<String, String> rackToHashMapEntries = new HashMap<String, String>() {{
-            this.put("us-east-1c", "c");
-            this.put("us-east-1d", "d");
-            this.put("us-east-1e", "e");
+        Map<String, String> rackToHashMapEntries = new HashMap<>();
+        rackToHashMapEntries.put("us-east-1c", "c");
+        rackToHashMapEntries.put("us-east-1d", "d");
+        rackToHashMapEntries.put("us-east-1e", "e");
 
-            this.put("eu-west-1a", "c");
-            this.put("eu-west-1b", "d");
-            this.put("eu-west-1c", "e");
+        rackToHashMapEntries.put("eu-west-1a", "c");
+        rackToHashMapEntries.put("eu-west-1b", "d");
+        rackToHashMapEntries.put("eu-west-1c", "e");
 
-            this.put("us-west-2a", "c");
-            this.put("us-west-2b", "d");
-            this.put("us-west-2c", "e");
-        }};
+        rackToHashMapEntries.put("us-west-2a", "c");
+        rackToHashMapEntries.put("us-west-2b", "d");
+        rackToHashMapEntries.put("us-west-2c", "e");
         setRackToShardMap(rackToHashMapEntries);
     }
 }

@@ -46,7 +46,7 @@ import static org.junit.Assert.assertTrue;
 public abstract class BaseQueueTests {
 
 
-    private String queueName;
+    private final String queueName;
 
     protected static final String redisKeyPrefix = "testdynoqueues";
 
@@ -194,10 +194,11 @@ public abstract class BaseQueueTests {
         List<Message> more = rdq.pop(1, 1, TimeUnit.SECONDS);
         // If we published more than we consumed since we could've published more than we consumed in which case this
         // will not be empty
-        if(published.get() == consumed.get())
+        if (published.get() == consumed.get()) {
             assertEquals(0, more.size());
-        else
+        } else {
             assertEquals(1, more.size());
+        }
 
         ses.shutdownNow();
     }
@@ -273,8 +274,8 @@ public abstract class BaseQueueTests {
 
         assertNotNull(messages3);
         assertEquals(10, messages3.size());
-        assertEquals(messages.stream().map(msg -> msg.getId()).sorted().collect(Collectors.toList()), messages3.stream().map(msg -> msg.getId()).sorted().collect(Collectors.toList()));
-        assertEquals(10, messages3.stream().map(msg -> msg.getId()).collect(Collectors.toSet()).size());
+        assertEquals(messages.stream().map(Message::getId).sorted().collect(Collectors.toList()), messages3.stream().map(Message::getId).sorted().collect(Collectors.toList()));
+        assertEquals(10, messages3.stream().map(Message::getId).collect(Collectors.toSet()).size());
         messages3.stream().forEach(System.out::println);
 
         for (Message msg : messages3) {

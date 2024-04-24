@@ -54,7 +54,7 @@ public abstract class QueueBenchmark {
             }
             long e = System.currentTimeMillis();
             long diff = e - s;
-            long throughput = 1000 * ((count) / diff);
+            long throughput = 1000 * (count / diff);
             if (count != ids.size()) {
                 //We consumed dups
                 throw new RuntimeException("There were duplicate messages consumed... expected messages to be consumed " + count + ", but actual was : " + ids.size());

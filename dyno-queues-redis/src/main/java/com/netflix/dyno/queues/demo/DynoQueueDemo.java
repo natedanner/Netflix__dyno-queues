@@ -100,80 +100,80 @@ public class DynoQueueDemo extends DynoJedisDemo {
         payloads.add(new Message("id14", "payload 14"));
         payloads.add(new Message("id15", "payload 15"));
 
-        DynoQueue V1Queue = queues.get("simpleQueue");
+        DynoQueue v1Queue = queues.get("simpleQueue");
 
         // Clear the queue in case the server already has the above key.
-        V1Queue.clear();
+        v1Queue.clear();
 
         // Test push() API
-        List pushed_msgs = V1Queue.push(payloads);
+        List pushedMsgs = v1Queue.push(payloads);
 
         // Test ensure() API
         Message msg1 = payloads.get(0);
-        logger.info("Does Message with ID '" + msg1.getId() + "' already exist? -> " + !V1Queue.ensure(msg1));
+        logger.info("Does Message with ID '" + msg1.getId() + "' already exist? -> " + !v1Queue.ensure(msg1));
 
         // Test containsPredicate() API
-        logger.info("Does the predicate 'searchable' exist in  the queue? -> " + V1Queue.containsPredicate("searchable"));
+        logger.info("Does the predicate 'searchable' exist in  the queue? -> " + v1Queue.containsPredicate("searchable"));
 
         // Test getMsgWithPredicate() API
-        logger.info("Get MSG ID that contains 'searchable' in the queue -> " + V1Queue.getMsgWithPredicate("searchable pay*"));
+        logger.info("Get MSG ID that contains 'searchable' in the queue -> " + v1Queue.getMsgWithPredicate("searchable pay*"));
 
         // Test getMsgWithPredicate(predicate, localShardOnly=true) API
         // NOTE: This only works on single ring sized Dynomite clusters.
-        logger.info("Get MSG ID that contains 'searchable' in the queue -> " + V1Queue.getMsgWithPredicate("searchable pay*", true));
-        logger.info("Get MSG ID that contains '3' in the queue -> " + V1Queue.getMsgWithPredicate("3", true));
+        logger.info("Get MSG ID that contains 'searchable' in the queue -> " + v1Queue.getMsgWithPredicate("searchable pay*", true));
+        logger.info("Get MSG ID that contains '3' in the queue -> " + v1Queue.getMsgWithPredicate("3", true));
 
-        Message poppedWithPredicate = V1Queue.popMsgWithPredicate("searchable pay*", false);
-        V1Queue.ack(poppedWithPredicate.getId());
+        Message poppedWithPredicate = v1Queue.popMsgWithPredicate("searchable pay*", false);
+        v1Queue.ack(poppedWithPredicate.getId());
 
-        List<Message> specific_pops = new ArrayList<>();
+        List<Message> specificPops = new ArrayList<>();
         // We'd only be able to pop from the local shard with popWithMsgId(), so try to pop the first payload ID we see in the local shard.
         // Until then pop all messages not in the local shard with unsafePopWithMsgIdAllShards().
         for (int i = 1; i < payloads.size(); ++i) {
-            Message popWithMsgId = V1Queue.popWithMsgId(payloads.get(i).getId());
+            Message popWithMsgId = v1Queue.popWithMsgId(payloads.get(i).getId());
             if (popWithMsgId != null) {
-                specific_pops.add(popWithMsgId);
+                specificPops.add(popWithMsgId);
                 break;
             } else {
                 // If we were unable to pop using popWithMsgId(), that means the message ID does not exist in the local shard.
                 // Ensure that we can pop with unsafePopWithMsgIdAllShards().
-                Message unsafeSpecificPop = V1Queue.unsafePopWithMsgIdAllShards(payloads.get(i).getId());
+                Message unsafeSpecificPop = v1Queue.unsafePopWithMsgIdAllShards(payloads.get(i).getId());
                 assert(unsafeSpecificPop != null);
-                boolean ack = V1Queue.ack(unsafeSpecificPop.getId());
-                assert(ack);
+                boolean ack = v1Queue.ack(unsafeSpecificPop.getId());
+                assertack;
             }
         }
 
         // Test ack()
-        boolean ack_successful = V1Queue.ack(specific_pops.get(0).getId());
-        assert(ack_successful);
+        boolean ackSuccessful = v1Queue.ack(specificPops.get(0).getId());
+        assertackSuccessful;
 
         // Test remove()
         // Note: This checks for "id9" specifically as it implicitly expects every 3rd element we push to be in our
         // local shard.
-        boolean removed = V1Queue.remove("id9");
-        assert(removed);
+        boolean removed = v1Queue.remove("id9");
+        assertremoved;
 
         // Test pop(). Even though we try to pop 3 messages, there will only be one remaining message in our local shard.
-        List<Message> popped_msgs = V1Queue.pop(1, 1000, TimeUnit.MILLISECONDS);
-        V1Queue.ack(popped_msgs.get(0).getId());
+        List<Message> poppedMsgs = v1Queue.pop(1, 1000, TimeUnit.MILLISECONDS);
+        v1Queue.ack(poppedMsgs.get(0).getId());
 
         // Test unsafePeekAllShards()
-        List<Message> peek_all_msgs = V1Queue.unsafePeekAllShards(5);
-        for (Message msg : peek_all_msgs) {
+        List<Message> peekAllMsgs = v1Queue.unsafePeekAllShards(5);
+        for (Message msg : peekAllMsgs) {
             logger.info("Message peeked (ID : payload) -> " + msg.getId() + " : " + msg.getPayload());
         }
 
         // Test unsafePopAllShards()
-        List<Message> pop_all_msgs = V1Queue.unsafePopAllShards(7, 1000, TimeUnit.MILLISECONDS);
-        for (Message msg : pop_all_msgs) {
+        List<Message> popAllMsgs = v1Queue.unsafePopAllShards(7, 1000, TimeUnit.MILLISECONDS);
+        for (Message msg : popAllMsgs) {
             logger.info("Message popped (ID : payload) -> " + msg.getId() + " : " + msg.getPayload());
-            boolean ack = V1Queue.ack(msg.getId());
-            assert(ack);
+            boolean ack = v1Queue.ack(msg.getId());
+            assertack;
         }
 
-        V1Queue.clear();
-        V1Queue.close();
+        v1Queue.clear();
+        v1Queue.close();
     }
 
     private void runSimpleV2QueueDemo(DynoJedisClient dyno) throws IOException {

@@ -38,7 +38,7 @@ public class JedisTests extends BaseQueueTests {
 
     private static String messageKeyPrefix;
 
-    private static int maxHashBuckets = 32;
+    private static final int maxHashBuckets = 32;
 
     public JedisTests() {
         super("jedis_queue_tests");

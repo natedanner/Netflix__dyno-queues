@@ -29,7 +29,7 @@ import redis.clients.jedis.params.ZAddParams;
  */
 public class RedisPipe implements Pipe {
 
-    private Pipeline pipe;
+    private final Pipeline pipe;
 
     public RedisPipe(Pipeline pipe) {
         this.pipe = pipe;

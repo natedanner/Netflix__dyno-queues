@@ -41,7 +41,7 @@ public class CustomShardingStrategyTest {
         @Override
         public String getNextShard(List<String> allShards, Message message) {
             int hashCodeAbs = Math.abs(message.getId().hashCode());
-            int calculatedShard = (hashCodeAbs % allShards.size());
+            int calculatedShard = hashCodeAbs % allShards.size();
             return allShards.get(calculatedShard);
         }
     }

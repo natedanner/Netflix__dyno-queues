@@ -62,7 +62,7 @@ public class RedisDynoQueueTest {
 
     private static String messageKeyPrefix;
 
-    private static int maxHashBuckets = 32;
+    private static final int maxHashBuckets = 32;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -287,8 +287,8 @@ public class RedisDynoQueueTest {
 
         assertNotNull(messages3);
         assertEquals(10, messages3.size());
-        assertEquals(messages.stream().map(msg -> msg.getId()).sorted().collect(Collectors.toList()), messages3.stream().map(msg -> msg.getId()).sorted().collect(Collectors.toList()));
-        assertEquals(10, messages3.stream().map(msg -> msg.getId()).collect(Collectors.toSet()).size());
+        assertEquals(messages.stream().map(Message::getId).sorted().collect(Collectors.toList()), messages3.stream().map(Message::getId).sorted().collect(Collectors.toList()));
+        assertEquals(10, messages3.stream().map(Message::getId).collect(Collectors.toSet()).size());
         messages3.stream().forEach(System.out::println);
         int bucketCounts = 0;
         for (int i = 0; i < maxHashBuckets; i++) {
